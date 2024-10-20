@@ -41,8 +41,22 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-      - name: Publish to Nexus
-        run: ./gradlew publish
+      - name: Get actual version
+        id: get_version
+        run: |
+          echo "VERSION=$(grep versionName version.properties | cut -d'=' -f2)" >> $GITHUB_ENV
+
+      - name: Nexus Repo Publish
+        uses: sonatype-nexus-community/nexus-repo-github-action@master
+        with:
+          serverUrl: ${{ NEXUS_URL }}
+          username: ${{ NEXUS_ADMIN }}
+          password: ${{ NEXUS_PASSWORD }}
+          format: maven2
+          repository: maven-releases
+          coordinates: groupId=nordix.dev artifactId=zsi version=${{ env.VERSION }}
+          assets: extension=jar
+          filename: ./build/outputs/aar/zsi-${{ env.VERSION }}.aar
 
       - name: Increment version and commit
         run: |
@@ -53,7 +67,7 @@ jobs:
           git commit -m "Increment version"
           git push
 
-      - name: Get new version from version.properties
+      - name: Get new version
         id: get_version
         run: |
           echo "VERSION=$(grep versionName version.properties | cut -d'=' -f2)" >> $GITHUB_ENV

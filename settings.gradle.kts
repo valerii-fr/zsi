@@ -20,5 +20,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Zebra Scanner Integration library"
-include(":app")
+include(":zsi")
  

@@ -3,7 +3,6 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    `maven-publish`
 }
 
 android {
@@ -13,6 +12,23 @@ android {
     defaultConfig {
         minSdk = 24
         targetSdk = 34
+        version = getVersionFromProperties()
+    }
+
+    buildOutputs.all {
+        val variantOutputImpl = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+        val variantName: String = variantOutputImpl.name
+        val outputFileName = buildString {
+            val name = listOfNotNull(
+                project.name,
+                if (variantName == "release") null else variantName,
+                project.version
+            )
+                .joinToString("-")
+            append(name)
+            append(".aar")
+        }
+        variantOutputImpl.outputFileName = outputFileName
     }
 
     buildTypes {
@@ -24,15 +40,20 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
         isCoreLibraryDesugaringEnabled = true
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
 }
+
+
+
 
 kotlin {
     sourceSets.all {
@@ -49,58 +70,6 @@ dependencies {
     coreLibraryDesugaring(libs.desugar)
 }
 
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            groupId = "dev.nordix"
-            artifactId = "zsi"
-            version = getVersionFromProperties()
-
-            afterEvaluate {
-                from(components["release"])
-            }
-
-            pom {
-                name.set("Zebra scanner integration library")
-                description.set("Integrates Zebra scanner functionality")
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set(System.getenv("CI_COMMIT_AUTHOR"))
-                        name.set(System.getenv("CI_COMMIT_AUTHOR_NAME"))
-                        email.set(System.getenv("CI_COMMIT_AUTHOR_EMAIL"))
-                    }
-                }
-                scm {
-                    connection.set("scm:git:${System.getenv("CI_REPOSITORY_URL")}")
-                    developerConnection.set("scm:git:${System.getenv("CI_REPOSITORY_URL")}")
-                    url.set(System.getenv("CI_PROJECT_URL"))
-                }
-            }
-        }
-    }
-
-    repositories {
-        maven {
-            url = uri(System.getenv("NEXUS_URL"))
-            credentials {
-                username = System.getenv("NEXUS_USERNAME")
-                password = System.getenv("NEXUS_PASSWORD")
-            }
-        }
-    }
-
-}
-
-tasks.register("publishToNexus") {
-    dependsOn("publish")
-}
-
 tasks.register("incrementVersion") {
     doLast {
         val props = Properties()
@@ -114,10 +83,6 @@ tasks.register("incrementVersion") {
         props.setProperty("version", newVersion)
         versionFile.writeText("version=$newVersion\n")
     }
-}
-
-tasks.named("publishToNexus") {
-    finalizedBy("incrementVersion", "createGitTag")
 }
 
 fun getVersionFromProperties(): String {
