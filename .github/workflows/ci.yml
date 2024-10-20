@@ -44,13 +44,13 @@ jobs:
       - name: Get actual version
         id: get_actual_version
         run: |
-          echo "VERSION=$(grep versionName version.properties | cut -d'=' -f2)" >> $GITHUB_ENV
+          echo "VERSION=$(grep versionName zsi/version.properties | cut -d'=' -f2)" >> $GITHUB_ENV
 
       - name: Nexus Repo Publish
         uses: sonatype-nexus-community/nexus-repo-github-action@master
         with:
           serverUrl: ${{ secrets.NEXUS_URL }}
-          username: ${{ secrets.NEXUS_ADMIN }}
+          username: ${{ secrets.NEXUS_USER }}
           password: ${{ secrets.NEXUS_PASSWORD }}
           format: maven2
           repository: maven-releases
@@ -70,7 +70,7 @@ jobs:
       - name: Get new version
         id: get_version
         run: |
-          echo "VERSION=$(grep versionName version.properties | cut -d'=' -f2)" >> $GITHUB_ENV
+          echo "VERSION=$(grep versionName zsi/version.properties | cut -d'=' -f2)" >> $GITHUB_ENV
 
       - name: Create Git tag
         run: |
