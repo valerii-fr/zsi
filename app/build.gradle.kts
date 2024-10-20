@@ -113,25 +113,6 @@ tasks.register("incrementVersion") {
 
         props.setProperty("version", newVersion)
         versionFile.writeText("version=$newVersion\n")
-
-        // Commit changes to Git
-        exec {
-            commandLine("git", "add", "version.properties")
-            commandLine("git", "commit", "-m", "Increment version to $newVersion")
-        }
-    }
-}
-
-tasks.register("createGitTag") {
-    doLast {
-        val props = Properties()
-        val versionFile = file("version.properties")
-        props.load(versionFile.inputStream())
-
-        exec {
-            commandLine("git", "tag", props.getProperty("version"))
-            commandLine("git", "push", "origin", props.getProperty("version"))
-        }
     }
 }
 

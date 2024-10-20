@@ -48,3 +48,27 @@ jobs:
           git add .
           git commit -m "Increment version"
           git push
+
+      - name: Get new version from version.properties
+        id: get_version
+        run: |
+          echo "VERSION=$(grep versionName version.properties | cut -d'=' -f2)" >> $GITHUB_ENV
+
+      - name: Create Git tag
+        run: |
+          git tag v${{ env.VERSION }}
+          git push origin v${{ env.VERSION }}
+          
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: Release v${{ env.VERSION }}
+          body: "New release of Android library."
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+    
