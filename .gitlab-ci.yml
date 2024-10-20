@@ -18,7 +18,7 @@ before_script:
 build:
   stage: build
   script:
-    - gradle assemble --info --build-cache
+    - gradle assemble --build-cache
   artifacts:
     paths:
       - build/outputs/aar/*.aar
