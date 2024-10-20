@@ -49,9 +49,9 @@ jobs:
       - name: Nexus Repo Publish
         uses: sonatype-nexus-community/nexus-repo-github-action@master
         with:
-          serverUrl: ${{ NEXUS_URL }}
-          username: ${{ NEXUS_ADMIN }}
-          password: ${{ NEXUS_PASSWORD }}
+          serverUrl: ${{ secrets.NEXUS_URL }}
+          username: ${{ secrets.NEXUS_ADMIN }}
+          password: ${{ secrets.NEXUS_PASSWORD }}
           format: maven2
           repository: maven-releases
           coordinates: groupId=nordix.dev artifactId=zsi version=${{ env.VERSION }}
