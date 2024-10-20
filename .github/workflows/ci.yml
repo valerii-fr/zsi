@@ -19,9 +19,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Debug NEXUS_URL
-        run: echo "NEXUS_URL is '${{ secrets.NEXUS_URL }}'"
-
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -40,9 +37,6 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
-
-      - name: Print all environment variables
-        run: printenv
 
       - name: Build with Gradle
         run: ./gradlew build
