@@ -87,7 +87,7 @@ publishing {
 
     repositories {
         maven {
-            url = uri("http://nexus/repository/maven-releases/")
+            url = uri(System.getenv("NEXUS_URL"))
             credentials {
                 username = System.getenv("NEXUS_USERNAME")
                 password = System.getenv("NEXUS_PASSWORD")
