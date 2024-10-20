@@ -42,7 +42,7 @@ jobs:
         run: ./gradlew build
 
       - name: Get actual version
-        id: get_version
+        id: get_actual_version
         run: |
           echo "VERSION=$(grep versionName version.properties | cut -d'=' -f2)" >> $GITHUB_ENV
 
