@@ -41,7 +41,7 @@ jobs:
         env:
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
-          NEXUS_URL: ${{ env.NEXUS_URL }}
+          NEXUS_URL: ${{ secrets.NEXUS_URL }}
 
       - name: Increment version and commit
         run: |

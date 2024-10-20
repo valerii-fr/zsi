@@ -87,7 +87,7 @@ publishing {
 
     repositories {
         maven {
-            url = uri(System.getenv("NEXUS_URL")) ?: throw IllegalArgumentException("URL mustn't be null")
+            url = uri(System.getenv("NEXUS_URL"))
             credentials {
                 username = System.getenv("NEXUS_USERNAME")
                 password = System.getenv("NEXUS_PASSWORD")
