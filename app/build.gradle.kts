@@ -52,7 +52,7 @@ dependencies {
 publishing {
     publications {
         register<MavenPublication>("release") {
-            groupId = "dev.nordix.zsi"
+            groupId = "dev.nordix"
             artifactId = "zsi"
             version = getVersionFromProperties()
 
