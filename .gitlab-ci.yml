@@ -1,4 +1,4 @@
-image: gradle:alpine
+image: gradle:gradle:8.10-jdk8
 
 stages:
   - build
@@ -7,7 +7,7 @@ stages:
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-  NEXUS_URL: "http://nexus.yourdomain.com/repository/maven-releases/"
+  NEXUS_URL: "${NEXUS_URL}"
   VERSION_PROPERTIES_FILE: "version.properties"
 
 before_script:
@@ -18,7 +18,7 @@ before_script:
 build:
   stage: build
   script:
-    - gradle assemble
+    - gradle assemble --info
   artifacts:
     paths:
       - build/outputs/aar/*.aar
@@ -26,9 +26,9 @@ build:
 publish:
   stage: publish
   script:
-    - gradle publish
+    - gradle publish --info
   only:
-    - main
+    - master
     - tags
 
 release:
@@ -36,11 +36,11 @@ release:
   script:
     - git config --global user.email "${GITLAB_USER_EMAIL}"
     - git config --global user.name "${GITLAB_USER_NAME}"
-    - git checkout main
-    - ./gradlew incrementVersion # предполагается, что у вас есть скрипт для инкремента
+    - git checkout master
+    - ./gradlew incrementVersion --info
     - git add version.properties
     - git commit -m "Increment version to $(grep 'version=' $VERSION_PROPERTIES_FILE | cut -d'=' -f2)"
-    - git push origin main
+    - git push origin master
   only:
     - tags
   when: on_success
