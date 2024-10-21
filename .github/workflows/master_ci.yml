@@ -81,7 +81,7 @@ jobs:
           password: ${{ secrets.NEXUS_PASSWORD }}
           format: maven2
           repository: maven-releases
-          coordinates: groupId=nordix.dev artifactId=zsi version=${{ env.VERSION }}
+          coordinates: groupId=dev.nordix artifactId=zsi version=${{ env.VERSION }}
           assets: extension=aar
           filename: zsi/build/outputs/aar/zsi-${{ env.VERSION }}.aar
 
