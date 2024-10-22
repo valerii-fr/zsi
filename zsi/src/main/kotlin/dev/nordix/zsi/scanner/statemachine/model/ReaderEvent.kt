@@ -6,11 +6,10 @@ import dev.nordix.zsi.scanner.domain.model.ScannerProperties
 import dev.nordix.zsi.scanner.domain.model.ScannerState
 import ru.nsk.kstatemachine.event.Event
 
-internal interface ReaderEvent : Event {
+interface ReaderEvent : Event {
 
     sealed interface User : ReaderEvent {
 
-        data class SetProperties(val properties: ScannerProperties) : User
         object Start : User
         object Stop : User
         object Launch : User
