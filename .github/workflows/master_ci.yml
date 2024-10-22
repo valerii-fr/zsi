@@ -1,4 +1,4 @@
-name: Android Library CI
+name: Nexus Publish
 
 on:
   push:
