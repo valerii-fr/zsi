@@ -35,7 +35,7 @@ import ru.nsk.kstatemachine.statemachine.onTransitionComplete
 import timber.log.Timber
 import java.time.Instant
 
-internal class ReaderStateMachine(
+class ReaderStateMachine(
     context: Context,
     private val scope: CoroutineScope,
     private val settings: StateFlow<ScannerSettings>,
